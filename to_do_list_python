@@ -1,0 +1,179 @@
+# Printing welcome to my to do list program
+def menu():
+        print("Please select choice by enter the number")
+        print("1. Create new task \n"
+      "2. Show task \n"
+      "3. Edit task \n"
+      "4. Update Status \n"
+      "5. Delete task \n"
+      "6. Save to do list \n"
+      "7. Load to do list \n"
+      "0. Exit")
+
+
+# Create new list add to details
+def create_task(details):
+        show_task_list(details)
+        print("Create new task")
+        task = {}
+        add_task = input("Please enter your new task: ")
+        task["title"] = add_task
+        task["status"] = "To Do"
+        details.append(task)
+        print("Your task has been added")
+        show_task_list(details)
+
+
+# Show every list in details
+def show_task_list(details):
+    if not details:
+        print("No tasks to display.")
+    else:
+        print("To do list:")
+        for index, detail in enumerate(details):
+            title = detail["title"]
+            status = detail["status"]
+            print(f"{index + 1} Title: {title}, Status: {status}")
+
+
+# Edit list by choose index number
+def edit_task(details):
+        show_task_list(details)
+        print("Edit to do list")  
+        try:
+            edit_list_number = int(input("Type index numbers in list: "))
+            if 1 <= edit_list_number <= len(details):
+                print(details[edit_list_number - 1]["title"])
+                edited_list = input("Please enter your new task: ")
+                details[edit_list_number - 1]["title"] = edited_list
+                print("Your task has been changed")
+                show_task_list(details)
+            else:
+                print("Invalid task. Select index numbers in list")
+        except ValueError:          
+            print("Invalid input. Enter a number in list")
+
+# Delete to do list by index number
+def delete_task(details):
+        show_task_list(details)
+        print("Delete to do list")
+        try:
+            delete_list_number = int(input("Type index numbers list: "))
+            if 1<= delete_list_number <= len(details):
+                delete_title = details[delete_list_number - 1]["title"]
+                print(f"{delete_title} has been deleted")
+                details.pop(delete_list_number - 1)
+                show_task_list(details)
+            else:
+                print("Invalid task. Select index numbers in list")            
+        except ValueError:
+            print("Invalid input. Enter a number in list")
+
+# Input and check valid choice
+def get_valid_choice():
+        while True:
+            try:
+                choice = int(input("Enter Number: "))
+                if choice == 0 or 1 <= choice <= 7:
+                    return(choice)
+                else:
+                    print("Invalid choice. Enter a number between 0 and 7")
+            except ValueError:
+                print("Invalid choice. Enter a number between 0 and 7")
+
+
+# Update status
+def update_status(details):
+    show_task_list(details)
+    print("Update status")
+    while True:
+        try:
+            update_status_number = int(input("Type index numbers in list: "))
+            if 1 <= update_status_number <= len(details):
+                print(details[update_status_number - 1]["title"])
+                print("Please enter your number for edit status: ")
+                print("1. To Do\n2. In Progress\n3. Completed")
+                updated_status = int(input())
+                if updated_status == 1:
+                    details[update_status_number - 1]["status"] = "To Do"
+                    break    
+                elif updated_status == 2:
+                    details[update_status_number - 1]["status"] = "In Progress"
+                    break 
+                elif updated_status == 3:
+                    details[update_status_number - 1]["status"] = "Completed"
+                    break
+            else:
+                print("Invalid task. Select index numbers in list")
+        except ValueError:
+            print("Invalid status choice. Please enter 1, 2, or 3.")
+         
+    print("Your status has been updated")
+    show_task_list(details)
+      
+
+# Save file
+def save_tasks_to_file(details, filename):
+        with open(filename, 'w') as file:
+            for task in details:
+                file.write(f"{task['title']},{task['status']}\n")
+
+
+# Load file
+def load_tasks_from_file(filename):
+        details = []
+        try:
+            with open(filename, 'r') as file:
+                for line in file:
+                    title, status = line.strip().split(',')
+                    details.append({"title": title, "status": status})
+            return details
+        except FileNotFoundError:
+            return []
+        show_task_list(details)
+  
+
+def main():
+    print("Welcome to My to do list by Thanatkat")
+    filename = "tasks.txt"
+    details = load_tasks_from_file(filename)
+      
+    while True:
+        menu()
+        choices = get_valid_choice()
+        
+        if choices == 1:
+            create_task(details)
+        elif choices == 2:
+            show_task_list(details)
+        elif choices == 3:
+            edit_task(details)
+        elif choices == 4:
+            update_status(details)
+        elif choices == 5:
+            delete_task(details)
+        elif choices == 6:
+            save_tasks_to_file(details, filename)
+        elif choices == 7:
+            load_tasks_from_file(filename)
+            show_task_list(details)
+        elif choices == 0:
+              while True:
+                  try:
+                      save = input("Do you want to save ? (y/n): ")
+                      if save == "y":
+                          save_tasks_to_file(details, filename)
+                          print("Your to do list has been saved")
+                          break
+                      elif save == "n":
+                          break
+                      else:
+                          print("Invalid input. Please enter 'y' or 'n'.")
+                  except ValueError:
+                      print("Invalid input. Please enter 'y' or 'n'.")
+              print("Goodbye!")
+              break
+
+    
+if __name__ == "__main__":
+    main()
