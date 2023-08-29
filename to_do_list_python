@@ -7,7 +7,6 @@ def menu():
       "4. Update Status \n"
       "5. Delete task \n"
       "6. Save to do list \n"
-      "7. Load to do list \n"
       "0. Exit")
 
 
@@ -58,7 +57,7 @@ def delete_task(details):
         show_task_list(details)
         print("Delete to do list")
         try:
-            delete_list_number = int(input("Type index numbers list: "))
+            delete_list_number = int(input("Type index numbers in list: "))
             if 1<= delete_list_number <= len(details):
                 delete_title = details[delete_list_number - 1]["title"]
                 print(f"{delete_title} has been deleted")
@@ -74,12 +73,12 @@ def get_valid_choice():
         while True:
             try:
                 choice = int(input("Enter Number: "))
-                if choice == 0 or 1 <= choice <= 7:
+                if choice == 0 or 1 <= choice <= 6:
                     return(choice)
                 else:
-                    print("Invalid choice. Enter a number between 0 and 7")
+                    print("Invalid choice. Enter a number between 0 and 6")
             except ValueError:
-                print("Invalid choice. Enter a number between 0 and 7")
+                print("Invalid choice. Enter a number between 0 and 6")
 
 
 # Update status
@@ -91,9 +90,9 @@ def update_status(details):
             update_status_number = int(input("Type index numbers in list: "))
             if 1 <= update_status_number <= len(details):
                 print(details[update_status_number - 1]["title"])
-                print("Please enter your number for edit status: ")
+                print("Enter your index number for edit status: ")
                 print("1. To Do\n2. In Progress\n3. Completed")
-                updated_status = int(input())
+                updated_status = int(input("Enter your number for update status: "))
                 if updated_status == 1:
                     details[update_status_number - 1]["status"] = "To Do"
                     break    
@@ -154,9 +153,6 @@ def main():
             delete_task(details)
         elif choices == 6:
             save_tasks_to_file(details, filename)
-        elif choices == 7:
-            load_tasks_from_file(filename)
-            show_task_list(details)
         elif choices == 0:
               while True:
                   try:
